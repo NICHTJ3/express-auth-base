@@ -45,9 +45,11 @@ async function checkTokenSetUser(req, res, next) {
   const tokens = auth.GetTokens(dbUser);
   res
     .cookie('access_token', tokens.accessToken, {
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
     })
     .cookie('refresh_token', tokens.refreshToken, {
+      httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
     });
 
