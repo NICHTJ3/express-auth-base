@@ -29,11 +29,16 @@ router.post('/signup', validateBody(SignupSchema), async (req, res) => {
   // Try signup user but responed with an error if it fails
   try {
     const tokens = await auth.Signup(name, email, password);
-    res.cookie('access_token', tokens.accessToken);
-    res.cookie('refresh_token', tokens.refreshToken);
-    return res.json({
-      message: 'Successfully authenticated'
-    });
+    return res
+      .cookie('access_token', tokens.accessToken, {
+        maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
+      })
+      .cookie('refresh_token', tokens.refreshToken, {
+        maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
+      })
+      .json({
+        message: 'Successfully authenticated'
+      });
   } catch (e) {
     return res.status(500).json(createValidationError('There was an error creating your user'));
   }
@@ -55,11 +60,16 @@ router.post('/login', validateBody(LoginSchema), async (req, res) => {
 
   const tokens = auth.GetTokens(user);
 
-  res.cookie('access_token', tokens.accessToken);
-  res.cookie('refresh_token', tokens.refreshToken);
-  return res.json({
-    message: 'Successfully authenticated'
-  });
+  return res
+    .cookie('access_token', tokens.accessToken, {
+      maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
+    })
+    .cookie('refresh_token', tokens.refreshToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
+    })
+    .json({
+      message: 'Successfully authenticated'
+    });
 });
 
 router.get('/user', ensureLoggedIn, (req, res) => res.json({

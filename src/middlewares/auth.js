@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
-const User = require('../models/user.model');
 const auth = require('../api/auth/auth');
 
 function ensureLoggedIn(req, res, next) {
@@ -44,8 +43,13 @@ async function checkTokenSetUser(req, res, next) {
   // Re-issue tokens this will work like user will stay logged in until they
   // stop comming back for a week
   const tokens = auth.GetTokens(dbUser);
-  res.cookie('access_token', tokens.accessToken);
-  res.cookie('refresh_token', tokens.refreshToken);
+  res
+    .cookie('access_token', tokens.accessToken, {
+      maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
+    })
+    .cookie('refresh_token', tokens.refreshToken, {
+      maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
+    });
 
   req.user = data;
   return next();
