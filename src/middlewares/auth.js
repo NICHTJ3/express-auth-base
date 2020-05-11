@@ -11,7 +11,7 @@ function ensureLoggedIn(req, res, next) {
   }
 }
 
-function checkTokenSetUser(req, res, next) {
+async function checkTokenSetUser(req, res, next) {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
 
@@ -20,6 +20,8 @@ function checkTokenSetUser(req, res, next) {
   if (accessToken) {
     try {
       data = jwt.verify(accessToken, config.accessToken);
+      req.user = data;
+      return next();
       // eslint-disable-next-line no-empty
     } catch (_) {}
   }
@@ -28,15 +30,13 @@ function checkTokenSetUser(req, res, next) {
   if (refreshToken && !data) {
     try {
       data = jwt.verify(refreshToken, config.refreshToken);
-    } catch (_) {
-      return next();
-    }
+      // eslint-disable-next-line no-empty
+    } catch (_) {}
   }
 
   // This is bad could be swapped for redis but it's fine
-  const dbUser = User.findOne({ email: data.email }).exec();
-
-  // Token has been invalidated
+  const dbUser = await auth.GetUser(data.email);
+  // Token has been invalidated so just proceed without it
   if (!data || dbUser.tokenVersion !== data.tokenVersion) {
     return next();
   }
@@ -45,7 +45,8 @@ function checkTokenSetUser(req, res, next) {
   // stop comming back for a week
   const tokens = auth.GetTokens(dbUser);
   res.cookie('access_token', tokens.accessToken);
-  res.cookie('refresh_token', tokens.refresh_token);
+  res.cookie('refresh_token', tokens.refreshToken);
+
   req.user = data;
   return next();
 }

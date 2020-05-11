@@ -13,7 +13,8 @@ const User = new Schema({
   },
   // This is used to invalidate user tokens
   tokenVersion: {
-    type: Number
+    type: Number,
+    default: 1
   },
   password: {
     type: String,
