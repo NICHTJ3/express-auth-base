@@ -1,0 +1,33 @@
+version: '3.3'
+
+volumes:
+  db:
+
+services:
+  db:
+    image: mongo
+    volumes:
+      - 'db:/data/db'
+    ports:
+      - 5555:27017
+    environment:
+      # The username and passwords that will be user for the database service
+      - MONGO_INITDB_ROOT_USERNAME=yourUsername
+      - MONGO_INITDB_ROOT_PASSWORD=yourPassword
+    networks:
+      - default
+
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - './:/usr/src/app'
+      - '/usr/src/app/node_modules'
+    ports:
+      - 5000:5000
+    env_file: './.env'
+    environment:
+      - PORT=5000
+    networks:
+      - default
