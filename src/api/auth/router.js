@@ -20,7 +20,7 @@ router.post('/signup', validateBody(SignupSchema), async (req, res) => {
   const email = emailDirty.toLowerCase();
 
   // Check email is not already taken
-  if (await auth.EmailTaken(req.email)) {
+  if (await auth.EmailTaken(email)) {
     return res.status(422).json({
       errors: [createValidationError('Email already taken', ['email'])]
     });

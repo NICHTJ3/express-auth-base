@@ -25,17 +25,20 @@ async function checkTokenSetUser(req, res, next) {
   const refreshToken = req.cookies.refresh_token;
   const csrfToken = req.header('x-csrf-token');
 
+  if (!csrfToken) return next();
+
   let data;
   // Try authenticate with the access token if it works just continue
   data = getTokenData(accessToken, config.accessToken);
-  if (data.csrfToken !== csrfToken) next();
   if (data) {
+    if (data.csrfToken !== csrfToken) return next();
     req.user = data;
     return next();
   }
 
   // If authentication above failed Try authenticate with the refresh token
   data = getTokenData(refreshToken, config.refreshToken);
+  if (!data) return next();
 
   const user = await auth.GetUser(data.email);
 
