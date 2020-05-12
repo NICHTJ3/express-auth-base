@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Auth = require('../lib/auth');
+const Tokens = require('../lib/tokens');
 const Mailer = require('../lib/mailer');
 const config = require('../../../config');
 
@@ -55,7 +56,7 @@ exports.login = async (req, res) => {
     });
   }
 
-  const tokens = Auth.GetTokens(user);
+  const tokens = Tokens.GetTokens(user);
 
   return res
     .cookie('access_token', tokens.accessToken, config.accessTokenOptions)

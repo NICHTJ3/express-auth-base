@@ -1,41 +1,5 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { v4: uuid } = require('uuid');
 const { User } = require('../models');
-const config = require('../../../config');
-
-function GetTokens(user) {
-  const csrfToken = uuid();
-  const accessToken = jwt.sign(
-    {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      tokenVersion: user.tokenVersion,
-      csrfToken
-    },
-    config.tokens.access,
-    {
-      expiresIn: '4h'
-    }
-  );
-
-  const refreshToken = jwt.sign(
-    {
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      tokenVersion: user.tokenVersion,
-      csrfToken
-    },
-    config.tokens.refresh,
-    {
-      expiresIn: '7d'
-    }
-  );
-
-  return { accessToken, refreshToken, csrfToken };
-}
 
 async function GetUser(email) {
   return User.findOne({ email }).exec();
@@ -75,7 +39,6 @@ async function AddUser(name, email, password) {
 module.exports = {
   AddUser,
   GetUser,
-  GetTokens,
   PasswordsMatch,
   UpdatePassword,
   EmailTaken

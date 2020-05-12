@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+const Tokens = require('../lib/tokens');
 const config = require('../../../config');
-const auth = require('../lib/auth');
+const Auth = require('../lib/auth');
 
 function getTokenData(token, secret) {
   try {
@@ -35,14 +36,14 @@ module.exports = async function checkTokensSetUser(req, res, next) {
   data = getTokenData(refreshToken, config.tokens.refresh);
   if (!data) return next();
 
-  const user = await auth.GetUser(data.email);
+  const user = await Auth.GetUser(data.email);
 
   // Token has been invalidated or the csrfToken doesn't match so just proceed without it
   if (!tokenIsValid(user, data, csrfToken)) return next();
 
   // Re-issue tokens this will work like user will stay logged in until they
   // stop comming back for a week
-  const tokens = auth.GetTokens(user);
+  const tokens = Tokens.GetTokens(user);
   res
     .cookie('access_token', tokens.accessToken, config.accessTokenOptions)
     .cookie('refresh_token', tokens.refreshToken, config.refreshTokenOption);
