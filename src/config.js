@@ -22,7 +22,22 @@ const envVarsSchema = Joi.object({
     .description('The secret used to encrypt users access data'),
   TOKEN_SECRET_REFRESH: Joi.string()
     .required()
-    .description('The secret used to encrypt users refresh token')
+    .description('The secret used to encrypt users refresh token'),
+  TOKEN_SECRET_EMAIL: Joi.string()
+    .required()
+    .description('The secret used to encrypt users email token'),
+  GMAIL_USER: Joi.string()
+    .required()
+    .description('The email for the account used to send confirmation emails'),
+  GMAIL_CLIENT_ID: Joi.string()
+    .required()
+    .description('The client id for the google account used to send confirmation emails'),
+  GMAIL_CLIENT_SECRET: Joi.string()
+    .required()
+    .description('The client secret for the google account used to send confirmation emails'),
+  GMAIL_REFRESH_TOKEN: Joi.string()
+    .required()
+    .description('The refresh token for the google account used to send confirmation emails')
 })
   .unknown()
   .required();
@@ -37,8 +52,17 @@ const config = {
   port: envVars.PORT,
   mongooseDebug: envVars.MONGOOSE_DEBUG,
   mongooseURI: envVars.MONGO_URI,
-  refreshToken: envVars.TOKEN_SECRET_ACCESS,
-  accessToken: envVars.TOKEN_SECRET_REFRESH,
+  tokens: {
+    refresh: envVars.TOKEN_SECRET_ACCESS,
+    access: envVars.TOKEN_SECRET_REFRESH,
+    email: envVars.TOKEN_SECRET_EMAIL
+  },
+  gmail: {
+    user: envVars.GMAIL_USER,
+    clientId: envVars.GMAIL_CLIENT_ID,
+    clientSecret: envVars.GMAIL_SECRET,
+    refreshToken: envVars.GMAIL_REFRESH_TOKEN
+  },
   accessTokenOptions: {
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours

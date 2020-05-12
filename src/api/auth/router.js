@@ -14,4 +14,6 @@ router.post('/login', validateBody(RequestSchemas.LoginSchema), AuthController.l
 
 router.get('/user', ensureLoggedIn, AuthController.getUserCurrentUser);
 
+router.get('/confirm/:token', AuthController.confirmEmail);
+
 module.exports = router;

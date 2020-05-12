@@ -14,7 +14,7 @@ function GetTokens(user) {
       tokenVersion: user.tokenVersion,
       csrfToken
     },
-    config.accessToken,
+    config.tokens.access,
     {
       expiresIn: '4h'
     }
@@ -28,7 +28,7 @@ function GetTokens(user) {
       tokenVersion: user.tokenVersion,
       csrfToken
     },
-    config.refreshToken,
+    config.tokens.refresh,
     {
       expiresIn: '7d'
     }

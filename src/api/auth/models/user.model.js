@@ -16,6 +16,11 @@ const User = new Schema({
     type: Number,
     default: 1
   },
+  // This is used to check the email has been validated
+  confirmed: {
+    type: Boolean,
+    default: false
+  },
   password: {
     type: String,
     required: true,
