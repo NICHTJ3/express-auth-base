@@ -55,7 +55,7 @@ router.post('/login', validateBody(LoginSchema), async (req, res) => {
   // Try get user with the given email
   const user = await auth.GetUser(email);
 
-  if (!user || !auth.PasswordsMatch(password, user.password)) {
+  if (!user || !(await auth.PasswordsMatch(password, user.password))) {
     return res.status(400).json({
       errors: [createValidationError('Incorrect information')]
     });
