@@ -10,7 +10,7 @@ const config = require('./config');
 
 require('dotenv').config();
 
-const middlewares = require('./middlewares');
+const middlewares = require('./api/middlewares');
 const { checkTokensSetUser } = require('./api/auth/middlewares');
 const api = require('./api');
 

@@ -4,7 +4,7 @@ const RequestSchemas = require('./schemas');
 
 const router = express.Router();
 const { ensureLoggedIn } = require('./middlewares');
-const { validateBody } = require('../../middlewares');
+const { validateBody } = require('../middlewares');
 
 router.get('/', AuthController.home);
 
