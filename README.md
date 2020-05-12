@@ -3,6 +3,9 @@ This is a example of a basic api using jwt refresh tokens
 
 ## Getting up and running
 ```sh
+git clone https://github.com/nichtj3/express-auth-base project-name
+cd project-name
+# Copy .env.sample file to .env and fill in
 docker-compose up
 ```
 
