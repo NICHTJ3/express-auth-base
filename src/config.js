@@ -60,7 +60,7 @@ const config = {
   gmail: {
     user: envVars.GMAIL_USER,
     clientId: envVars.GMAIL_CLIENT_ID,
-    clientSecret: envVars.GMAIL_SECRET,
+    clientSecret: envVars.GMAIL_CLIENT_SECRET,
     refreshToken: envVars.GMAIL_REFRESH_TOKEN
   },
   accessTokenOptions: {
