@@ -17,6 +17,9 @@ If you need to know what data to send to each endpoint have a look at the schema
   - Where a user can signup
 - /ap1/v1/auth/login
   - Where a user could login
+- /ap1/v1/auth/confirm/:token
+  - Where a user will confirm there email
+    - user will be redirected here when they confirm there email
 - /ap1/v1/example
   - An example endpoint that requires authentication
 
@@ -24,7 +27,7 @@ If you need to know what data to send to each endpoint have a look at the schema
 Authentication is made up of two parts
   - X-CSRF-Token header set to the csrfToken returned in the request to login
     or signup
-  - And the cookies set when you login or signup
+  - And the cookies set when you login
 
 ## Other things to note
 - All tokens issued to a specific user can be invalidated by incrementing the
