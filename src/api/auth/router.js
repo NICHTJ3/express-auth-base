@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('./auth');
 const { validateBody } = require('../../middlewares');
+const config = require('../../config');
 const { SignupSchema, LoginSchema } = require('./schemas');
 
 const router = express.Router();
@@ -30,14 +31,8 @@ router.post('/signup', validateBody(SignupSchema), async (req, res) => {
   try {
     const tokens = await auth.Signup(name, email, password);
     return res
-      .cookie('access_token', tokens.accessToken, {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
-      })
-      .cookie('refresh_token', tokens.refreshToken, {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
-      })
+      .cookie('access_token', tokens.accessToken, config.accessTokenOptions)
+      .cookie('refresh_token', tokens.refreshToken, config.refreshTokenOptions)
       .json({
         message: 'Successfully authenticated',
         csrfToken: tokens.csrfToken
@@ -64,14 +59,8 @@ router.post('/login', validateBody(LoginSchema), async (req, res) => {
   const tokens = auth.GetTokens(user);
 
   return res
-    .cookie('access_token', tokens.accessToken, {
-      HttpOnly: true,
-      maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
-    })
-    .cookie('refresh_token', tokens.refreshToken, {
-      HttpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
-    })
+    .cookie('access_token', tokens.accessToken, config.accessTokenOptions)
+    .cookie('refresh_token', tokens.refreshToken, config.refreshTokenOptions)
     .json({
       message: 'Successfully authenticated',
       csrfToken: tokens.csrfToken

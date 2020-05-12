@@ -38,7 +38,15 @@ const config = {
   mongooseDebug: envVars.MONGOOSE_DEBUG,
   mongooseURI: envVars.MONGO_URI,
   refreshToken: envVars.TOKEN_SECRET_ACCESS,
-  accessToken: envVars.TOKEN_SECRET_REFRESH
+  accessToken: envVars.TOKEN_SECRET_REFRESH,
+  accessTokenOptions: {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
+  },
+  refreshTokenOptions: {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
+  }
 };
 
 module.exports = config;

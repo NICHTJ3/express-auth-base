@@ -44,14 +44,8 @@ async function checkTokensSetUser(req, res, next) {
   // stop comming back for a week
   const tokens = auth.GetTokens(user);
   res
-    .cookie('access_token', tokens.accessToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 4 // Expire in 4 hours
-    })
-    .cookie('refresh_token', tokens.refreshToken, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
-    });
+    .cookie('access_token', tokens.accessToken, config.accessTokenOptions)
+    .cookie('refresh_token', tokens.refreshToken, config.refreshTokenOption);
 
   req.user = data;
   return next();
