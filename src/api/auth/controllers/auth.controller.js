@@ -72,7 +72,7 @@ exports.getUserCurrentUser = (req, res) => res.json({
 
 exports.confirmEmail = async (req, res) => {
   try {
-    const { email } = jwt.verify(req.params.token, config.emailToken);
+    const { email } = jwt.verify(req.params.token, config.tokens.email);
     const user = await Auth.GetUser(email);
     user.confirmed = true;
     await user.save();

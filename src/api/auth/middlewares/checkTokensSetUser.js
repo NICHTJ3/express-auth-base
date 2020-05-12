@@ -24,7 +24,7 @@ module.exports = async function checkTokensSetUser(req, res, next) {
 
   let data;
   // Try authenticate with the access token if it works just continue
-  data = getTokenData(accessToken, config.accessToken);
+  data = getTokenData(accessToken, config.tokens.access);
   if (data) {
     if (data.csrfToken !== csrfToken) return next();
     req.user = data;
@@ -32,7 +32,7 @@ module.exports = async function checkTokensSetUser(req, res, next) {
   }
 
   // If authentication above failed Try authenticate with the refresh token
-  data = getTokenData(refreshToken, config.refreshToken);
+  data = getTokenData(refreshToken, config.tokens.refresh);
   if (!data) return next();
 
   const user = await auth.GetUser(data.email);
