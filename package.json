@@ -1,7 +1,7 @@
 {
-  "name": "express-api-starter",
+  "name": "express-auth-base",
   "version": "1.2.0",
-  "description": " A basic starter for an express.js API",
+  "description": " A basic starter for an express.js API with auth",
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
