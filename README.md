@@ -1,45 +1,29 @@
-# Express API Starter
+# Express auth base
+This is a example of a basic api using jwt refresh tokens
 
-Includes API Server utilities:
-
-* [morgan](https://www.npmjs.com/package/morgan)
-  * HTTP request logger middleware for node.js
-* [helmet](https://www.npmjs.com/package/helmet)
-  * Helmet helps you secure your Express apps by setting various HTTP headers. It's not a silver bullet, but it can help!
-* [dotenv](https://www.npmjs.com/package/dotenv)
-  * Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`
-
-Development utilities:
-
-* [nodemon](https://www.npmjs.com/package/nodemon)
-  * nodemon is a tool that helps develop node.js based applications by automatically restarting the node application when file changes in the directory are detected.
-* [eslint](https://www.npmjs.com/package/eslint)
-  * ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
-* [mocha](https://www.npmjs.com/package/mocha)
-  * ☕️ Simple, flexible, fun JavaScript test framework for Node.js & The Browser ☕️
-* [supertest](https://www.npmjs.com/package/supertest)
-  * HTTP assertions made easy via superagent.
-
-## Setup
-
-```
-npm install
+## Getting up and running
+```sh
+docker-compose up
 ```
 
-## Lint
+## The Routes
+If you need to know what data to send to each endpoint have a look at the schemas
+- /api/v1/
+  - The root of the api
+- /ap1/v1/auth/signup
+  - Where a user can signup
+- /ap1/v1/auth/login
+  - Where a user could login
+- /ap1/v1/example
+  - An example endpoint that requires authentication
 
-```
-npm run lint
-```
+## The authentication
+Authentication is made up of two parts
+  - X-CSRF-Token header set to the csrfToken returned in the request to login
+    or signup
+  - And the cookies set when you login or signup
 
-## Test
-
-```
-npm run test
-```
-
-## Development
-
-```
-npm run dev
-```
+## Other things to note
+- All tokens issued to a specific user can be invalidated by incrementing the
+  tokenVersion on the user in the database (this will only take effect when the
+  access token expires)
