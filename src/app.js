@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use(middlewares.checkTokenSetUser);
+app.use(middlewares.checkTokensSetUser);
 
 app.use('/api/v1', api);
 

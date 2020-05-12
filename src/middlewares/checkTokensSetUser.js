@@ -2,11 +2,6 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 const auth = require('../api/auth/auth');
 
-function ensureLoggedIn(req, res, next) {
-  if (req.user && req.user._id) return next();
-  return res.status(401).json({ message: 'UnAuthorized' });
-}
-
 function getTokenData(token, secret) {
   try {
     const data = jwt.verify(token, secret);
@@ -20,7 +15,7 @@ async function tokenIsValid(user, data, csrfToken) {
   return data && user.tokenVersion === data.tokenVersion && data.csrfToken === csrfToken;
 }
 
-async function checkTokenSetUser(req, res, next) {
+async function checkTokensSetUser(req, res, next) {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
   const csrfToken = req.header('x-csrf-token');
@@ -61,8 +56,4 @@ async function checkTokenSetUser(req, res, next) {
   req.user = data;
   return next();
 }
-
-module.exports = {
-  checkTokenSetUser,
-  ensureLoggedIn
-};
+module.exports = checkTokensSetUser;
