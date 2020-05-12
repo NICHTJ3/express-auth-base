@@ -26,6 +26,9 @@ const envVarsSchema = Joi.object({
   TOKEN_SECRET_EMAIL: Joi.string()
     .required()
     .description('The secret used to encrypt users email token'),
+  TOKEN_SECRET_PASSWORD_RESET: Joi.string()
+    .required()
+    .description('The secret used to encrypt users password reset token'),
   GMAIL_USER: Joi.string()
     .required()
     .description('The email for the account used to send confirmation emails'),
@@ -55,7 +58,8 @@ const config = {
   tokens: {
     refresh: envVars.TOKEN_SECRET_ACCESS,
     access: envVars.TOKEN_SECRET_REFRESH,
-    email: envVars.TOKEN_SECRET_EMAIL
+    email: envVars.TOKEN_SECRET_EMAIL,
+    passwordReset: envVars.TOKEN_SECRET_PASSWORD_RESET
   },
   gmail: {
     user: envVars.GMAIL_USER,

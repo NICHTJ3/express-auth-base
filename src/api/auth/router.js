@@ -23,4 +23,16 @@ router.post(
   PasswordController.changePassword
 );
 
+router.post(
+  '/password/forgotPassword',
+  validateBody(RequestSchemas.ForgotPassword),
+  PasswordController.forgotPassword
+);
+
+router.post(
+  '/password/resetPassword/:token',
+  validateBody(RequestSchemas.ResetPassword),
+  PasswordController.resetPassword
+);
+
 module.exports = router;

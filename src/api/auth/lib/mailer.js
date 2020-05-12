@@ -38,4 +38,22 @@ module.exports = class Mailer {
       }
     );
   }
+
+  sendPasswordResetEmail() {
+    jwt.sign(
+      {
+        email: this.email
+      },
+      config.tokens.passwordReset,
+      { expiresIn: '1d' },
+      (err, emailToken) => {
+        const url = `http://localhost:3000/auth/resetPassword/${emailToken}`;
+        this.transport.sendMail({
+          to: this.email,
+          subject: 'Forgot your password',
+          html: `Please click this link to reset your password: <a href="${url}">Reset</a> `
+        });
+      }
+    );
+  }
 };
