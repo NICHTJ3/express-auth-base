@@ -15,7 +15,7 @@ async function tokenIsValid(user, data, csrfToken) {
   return data && user.tokenVersion === data.tokenVersion && data.csrfToken === csrfToken;
 }
 
-async function checkTokensSetUser(req, res, next) {
+module.exports = async function checkTokensSetUser(req, res, next) {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
   const csrfToken = req.header('x-csrf-token');
@@ -49,5 +49,4 @@ async function checkTokensSetUser(req, res, next) {
 
   req.user = data;
   return next();
-}
-module.exports = checkTokensSetUser;
+};

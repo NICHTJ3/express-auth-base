@@ -1,5 +1,5 @@
-const Auth = require('./lib/auth');
-const config = require('../../config');
+const Auth = require('../lib/auth');
+const config = require('../../../config');
 
 const createValidationError = (message, type = ['general']) => ({
   type,

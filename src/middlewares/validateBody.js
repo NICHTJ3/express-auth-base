@@ -1,11 +1,13 @@
 const Joi = require('@hapi/joi');
 
-const createValidationError = (message, type = ['general']) => ({
-  type,
-  message
-});
+function createValidationError(message, type = ['general']) {
+  return {
+    type,
+    message
+  };
+}
 
-const validateBody = (schema) => {
+module.exports = function validateBody(schema) {
   // Check schema is valid
   const validSchema = schema instanceof Joi.constructor;
   if (!validSchema) throw Error('Schema supplied was not valid');
@@ -23,5 +25,3 @@ const validateBody = (schema) => {
     return next();
   };
 };
-
-module.exports = validateBody;
