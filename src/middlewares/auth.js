@@ -3,46 +3,48 @@ const config = require('../config');
 const auth = require('../api/auth/auth');
 
 function ensureLoggedIn(req, res, next) {
-  if (req.user && req.user._id) next();
-  else {
-    res.status(401);
-    res.json({ message: 'UnAuthorized' });
+  if (req.user && req.user._id) return next();
+  return res.status(401).json({ message: 'UnAuthorized' });
+}
+
+function getTokenData(token, secret) {
+  try {
+    const data = jwt.verify(token, secret);
+    return data;
+  } catch (_) {
+    return null;
   }
+}
+
+async function tokenIsValid(user, data, csrfToken) {
+  return data && user.tokenVersion === data.tokenVersion && data.csrfToken === csrfToken;
 }
 
 async function checkTokenSetUser(req, res, next) {
   const accessToken = req.cookies.access_token;
   const refreshToken = req.cookies.refresh_token;
+  const csrfToken = req.header('x-csrf-token');
 
   let data;
-  // Try authenticate with the access token
-  if (accessToken) {
-    try {
-      data = jwt.verify(accessToken, config.accessToken);
-      req.user = data;
-      return next();
-      // eslint-disable-next-line no-empty
-    } catch (_) {}
-  }
-
-  // If authentication above failed Try authenticate with the access token
-  if (refreshToken && !data) {
-    try {
-      data = jwt.verify(refreshToken, config.refreshToken);
-      // eslint-disable-next-line no-empty
-    } catch (_) {}
-  }
-
-  // This is bad could be swapped for redis but it's fine
-  const dbUser = await auth.GetUser(data.email);
-  // Token has been invalidated so just proceed without it
-  if (!data || dbUser.tokenVersion !== data.tokenVersion) {
+  // Try authenticate with the access token if it works just continue
+  data = getTokenData(accessToken, config.accessToken);
+  if (data.csrfToken !== csrfToken) next();
+  if (data) {
+    req.user = data;
     return next();
   }
 
+  // If authentication above failed Try authenticate with the refresh token
+  data = getTokenData(refreshToken, config.refreshToken);
+
+  const user = await auth.GetUser(data.email);
+
+  // Token has been invalidated or the csrfToken doesn't match so just proceed without it
+  if (!tokenIsValid(user, data, csrfToken)) return next();
+
   // Re-issue tokens this will work like user will stay logged in until they
   // stop comming back for a week
-  const tokens = auth.GetTokens(dbUser);
+  const tokens = auth.GetTokens(user);
   res
     .cookie('access_token', tokens.accessToken, {
       httpOnly: true,

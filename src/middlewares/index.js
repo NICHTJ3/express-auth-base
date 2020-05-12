@@ -7,17 +7,15 @@ const {
 } = require('./auth');
 
 function notFound(req, res, next) {
-  res.status(404);
-  const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
-  next(error);
+  if (res.headersSent) return next();
+  return res.status(404).json(`🔍 - Not Found - ${req.originalUrl}`);
 }
 
-/* eslint-disable no-unused-vars */
 function errorHandler(err, req, res, next) {
-  /* eslint-enable no-unused-vars */
+  if (res.headersSent) return next(err);
+
   const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
-  res.status(statusCode);
-  res.json({
+  return res.status(statusCode).json({
     message: err.message,
     stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
   });

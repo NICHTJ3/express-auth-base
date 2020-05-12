@@ -39,7 +39,8 @@ router.post('/signup', validateBody(SignupSchema), async (req, res) => {
         maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
       })
       .json({
-        message: 'Successfully authenticated'
+        message: 'Successfully authenticated',
+        csrfToken: tokens.csrfToken
       });
   } catch (e) {
     return res.status(500).json(createValidationError('There was an error creating your user'));
@@ -72,7 +73,8 @@ router.post('/login', validateBody(LoginSchema), async (req, res) => {
       maxAge: 1000 * 60 * 60 * 24 * 7 // Expire in 7 days
     })
     .json({
-      message: 'Successfully authenticated'
+      message: 'Successfully authenticated',
+      csrfToken: tokens.csrfToken
     });
 });
 
