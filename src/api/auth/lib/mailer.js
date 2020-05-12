@@ -29,7 +29,7 @@ module.exports = class Mailer {
       config.tokens.email,
       { expiresIn: '1d' },
       (err, emailToken) => {
-        const url = `http://localhost:5000/api/v1/auth/confirm/${emailToken}`;
+        const url = `http://localhost:${config.port}/api/v1/auth/confirm/${emailToken}`;
         this.transport.sendMail({
           to: this.email,
           subject: 'Confirm email',
