@@ -59,5 +59,5 @@ exports.resetPassword = async (req, res) => {
       errors: [createValidationError('There was an error resetting your password')]
     });
   }
-  return res.redirect('http://localhost:3000/login');
+  return res.redirect(`${config.frontendUrl}/login`);
 };

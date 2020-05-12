@@ -82,5 +82,5 @@ exports.confirmEmail = async (req, res) => {
     });
   }
 
-  return res.redirect('http://localhost:3000/login');
+  return res.redirect(`${config.frontendUrl}/login`);
 };

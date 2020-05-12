@@ -17,6 +17,9 @@ const envVarsSchema = Joi.object({
   MONGO_URI: Joi.string()
     .required()
     .description('Mongo DB host url'),
+  FRONTEND_URL: Joi.string()
+    .required()
+    .description('The url used to redirect when confirming email or reseting password'),
   TOKEN_SECRET_ACCESS: Joi.string()
     .required()
     .description('The secret used to encrypt users access data'),
@@ -53,6 +56,7 @@ if (error) {
 const config = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  frontendUrl: envVars.FRONTEND_URL,
   mongooseDebug: envVars.MONGOOSE_DEBUG,
   mongooseURI: envVars.MONGO_URI,
   tokens: {

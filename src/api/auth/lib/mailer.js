@@ -47,7 +47,7 @@ module.exports = class Mailer {
       config.tokens.passwordReset,
       { expiresIn: '1d' },
       (err, emailToken) => {
-        const url = `http://localhost:3000/auth/resetPassword/${emailToken}`;
+        const url = `${config.frontendUrl}/resetPassword/${emailToken}`;
         this.transport.sendMail({
           to: this.email,
           subject: 'Forgot your password',
