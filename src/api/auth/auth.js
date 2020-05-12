@@ -54,7 +54,7 @@ async function PasswordsMatch(password1, password2) {
   return bcrypt.compare(password1, password2);
 }
 
-async function Signup(name, email, password) {
+async function AddUser(name, email, password) {
   const hashedPassword = await hashPassword(password);
 
   const user = new User({
@@ -63,17 +63,11 @@ async function Signup(name, email, password) {
     password: hashedPassword
   });
 
-  const result = await user.save();
-
-  // Tokenize data
-  // TODO: Make into a function
-  // TODO: Extract expiry values to the config
-  const tokens = GetTokens(result);
-  return tokens;
+  return user.save();
 }
 
 module.exports = {
-  Signup,
+  AddUser,
   GetUser,
   GetTokens,
   PasswordsMatch,
