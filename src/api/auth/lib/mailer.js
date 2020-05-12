@@ -33,7 +33,7 @@ module.exports = class Mailer {
         this.transport.sendMail({
           to: this.email,
           subject: 'Confirm email',
-          text: `Please click this link to confirm your email: <a href="${url}">Confirm</a> `
+          html: `Please click this link to confirm your email: <a href="${url}">Confirm</a> `
         });
       }
     );
