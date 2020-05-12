@@ -54,6 +54,12 @@ async function PasswordsMatch(password1, password2) {
   return bcrypt.compare(password1, password2);
 }
 
+async function UpdatePassword(email, newPassword) {
+  const user = await GetUser(email);
+  user.password = await hashPassword(newPassword);
+  return user.save();
+}
+
 async function AddUser(name, email, password) {
   const hashedPassword = await hashPassword(password);
 
@@ -71,5 +77,6 @@ module.exports = {
   GetUser,
   GetTokens,
   PasswordsMatch,
+  UpdatePassword,
   EmailTaken
 };
