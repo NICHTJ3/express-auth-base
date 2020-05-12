@@ -11,6 +11,7 @@ const config = require('./config');
 require('dotenv').config();
 
 const middlewares = require('./middlewares');
+const { checkTokensSetUser } = require('./api/auth/middlewares');
 const api = require('./api');
 
 const app = express();
@@ -31,7 +32,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use(middlewares.checkTokensSetUser);
+app.use(checkTokensSetUser);
 
 app.use('/api/v1', api);
 

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config');
-const auth = require('../api/auth/lib/auth');
+const config = require('../../../config');
+const auth = require('../lib/auth');
 
 function getTokenData(token, secret) {
   try {

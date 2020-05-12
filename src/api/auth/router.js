@@ -3,7 +3,8 @@ const AuthController = require('./controllers/auth.controller');
 const RequestSchemas = require('./schemas');
 
 const router = express.Router();
-const { ensureLoggedIn, validateBody } = require('../../middlewares');
+const { ensureLoggedIn } = require('./middlewares');
+const { validateBody } = require('../../middlewares');
 
 router.get('/', AuthController.home);
 
