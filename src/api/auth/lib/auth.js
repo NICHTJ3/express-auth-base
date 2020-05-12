@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { v4: uuid } = require('uuid');
-const User = require('../models/user.model');
+const { User } = require('../models');
 const config = require('../../../config');
 
 function GetTokens(user) {
