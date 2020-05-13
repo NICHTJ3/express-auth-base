@@ -5,9 +5,7 @@ const config = require('../../../config');
 const Auth = require('../lib/auth');
 
 async function tokenIsValid(user, data, csrfToken) {
-  return (
-    data && user.tokenVersion === data.tokenVersion && Crypto.Compare(csrfToken, data.csrfToken)
-  );
+  return user.tokenVersion === data.tokenVersion && Crypto.Compare(csrfToken, data.csrfToken);
 }
 
 function getTokenData(token, secret) {
