@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { v4: uuid } = require('uuid');
 const config = require('../../../config');
+const Crypto = require('./crypto');
 
 function GetSafeUserPayload(user, csrfToken) {
   return {
@@ -8,7 +9,7 @@ function GetSafeUserPayload(user, csrfToken) {
     name: user.name,
     email: user.email,
     tokenVersion: user.tokenVersion,
-    csrfToken
+    csrfToken: Crypto.Hash(csrfToken)
   };
 }
 

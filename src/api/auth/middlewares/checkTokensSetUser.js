@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const Tokens = require('../lib/tokens');
 const config = require('../../../config');
 const Auth = require('../lib/auth');
+const Crypto = require('../lib/crypto');
 
 function getTokenData(token, secret) {
   try {
@@ -13,7 +14,9 @@ function getTokenData(token, secret) {
 }
 
 async function tokenIsValid(user, data, csrfToken) {
-  return data && user.tokenVersion === data.tokenVersion && data.csrfToken === csrfToken;
+  return (
+    data && user.tokenVersion === data.tokenVersion && Crypto.Compare(data.csrfToken, csrfToken)
+  );
 }
 
 module.exports = async function checkTokensSetUser(req, res, next) {
@@ -27,7 +30,7 @@ module.exports = async function checkTokensSetUser(req, res, next) {
   // Try authenticate with the access token if it works just continue
   data = getTokenData(accessToken, config.tokens.access);
   if (data) {
-    if (data.csrfToken !== csrfToken) return next();
+    if (!(await Crypto.Compare(data.csrfToken, csrfToken))) return next();
     req.user = data;
     return next();
   }
