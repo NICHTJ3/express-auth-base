@@ -1,7 +1,9 @@
-const checkTokensSetUser = require('./checkTokensSetUser');
+const checkTokenSetUser = require('./checkTokenSetUser');
 const ensureLoggedIn = require('./ensureLoggedIn');
+const refreshTokens = require('./refreshTokens');
 
 module.exports = {
-  checkTokensSetUser,
-  ensureLoggedIn
+  checkTokenSetUser,
+  ensureLoggedIn,
+  refreshTokens
 };
