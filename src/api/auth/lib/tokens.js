@@ -3,13 +3,13 @@ const { v4: uuid } = require('uuid');
 const config = require('../../../config');
 const Crypto = require('./crypto');
 
-function GetSafeUserPayload(user, csrfToken) {
+async function GetSafeUserPayload(user, csrfToken) {
   return {
     _id: user._id,
     name: user.name,
     email: user.email,
     tokenVersion: user.tokenVersion,
-    csrfToken: Crypto.Hash(csrfToken)
+    csrfToken: await Crypto.Hash(csrfToken)
   };
 }
 
@@ -19,9 +19,9 @@ function GetToken(payload, secret, expiry) {
   });
 }
 
-exports.GetTokens = function GetTokens(user) {
-  const csrfToken = uuid();
-  const accessToken = GetToken(GetSafeUserPayload(user, csrfToken), config.tokens.access, '4h');
-  const refreshToken = GetToken(GetSafeUserPayload(user, csrfToken), config.tokens.refresh, '7d');
+exports.GetTokens = async function GetTokens(user, csrfToken = uuid()) {
+  const payload = await GetSafeUserPayload(user, csrfToken);
+  const accessToken = GetToken(payload, config.tokens.access, '4h');
+  const refreshToken = GetToken(payload, config.tokens.refresh, '7d');
   return { accessToken, refreshToken, csrfToken };
 };

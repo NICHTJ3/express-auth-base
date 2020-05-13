@@ -5,8 +5,8 @@ async function Hash(text) {
   return bcrypt.hash(text, salt);
 }
 
-async function Compare(text1, text2) {
-  return bcrypt.compare(text1, text2);
+async function Compare(unencryptedText, encryptedText) {
+  return bcrypt.compare(unencryptedText, encryptedText);
 }
 
 module.exports = {

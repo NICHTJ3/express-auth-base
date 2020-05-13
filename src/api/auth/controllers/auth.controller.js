@@ -56,7 +56,7 @@ exports.login = async (req, res) => {
     });
   }
 
-  const tokens = Tokens.GetTokens(user);
+  const tokens = await Tokens.GetTokens(user);
 
   return res
     .cookie('access_token', tokens.accessToken, config.accessTokenOptions)

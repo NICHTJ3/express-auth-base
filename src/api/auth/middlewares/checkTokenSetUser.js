@@ -19,7 +19,7 @@ module.exports = async function checkTokensSetUser(req, res, next) {
 
   // Try authenticate with the access token
   const data = getTokenData(accessToken, config.tokens.access);
-  if (data && (await Crypto.Compare(data.csrfToken, csrfToken))) {
+  if (data && (await Crypto.Compare(csrfToken, data.csrfToken))) {
     req.user = data;
   }
   return next();

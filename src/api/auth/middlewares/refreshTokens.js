@@ -6,7 +6,7 @@ const Auth = require('../lib/auth');
 
 async function tokenIsValid(user, data, csrfToken) {
   return (
-    data && user.tokenVersion === data.tokenVersion && Crypto.Compare(data.csrfToken, csrfToken)
+    data && user.tokenVersion === data.tokenVersion && Crypto.Compare(csrfToken, data.csrfToken)
   );
 }
 
@@ -31,15 +31,15 @@ module.exports = async function checkTokensSetUser(req, res, next) {
     const user = await Auth.GetUser(data.email);
     // Token has been invalidated or the csrfTokens don't
     // match so just proceed without authentication.
-    if (!tokenIsValid(user, data, csrfToken)) return next();
-
-    // Re-issue tokens this will work like user will stay logged in until they
-    // stop comming back for a week
-    const tokens = Tokens.GetTokens(user);
-    res
-      .cookie('access_token', tokens.accessToken, config.accessTokenOptions)
-      .cookie('refresh_token', tokens.refreshToken, config.refreshTokenOption);
-    req.user = data;
+    if (await tokenIsValid(user, data, csrfToken)) {
+      // Re-issue tokens this will work like user will stay logged in until they
+      // stop comming back for a week
+      const tokens = await Tokens.GetTokens(user, csrfToken);
+      res
+        .cookie('access_token', tokens.accessToken, config.accessTokenOptions)
+        .cookie('refresh_token', tokens.refreshToken, config.refreshTokenOption);
+      req.user = data;
+    }
   }
 
   return next();
